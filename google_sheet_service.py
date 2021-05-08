@@ -14,7 +14,8 @@ class GoogleSheetService:
 
     def __init__(self):
         http_auth = self.credentials.authorize(httplib2.Http())
-        self.service = apiclient.discovery.build('sheets', 'v4', http=http_auth)
+        self.service = apiclient.discovery.build(
+            'sheets', 'v4', http=http_auth)
 
     def get_service(self):
         return self.service
