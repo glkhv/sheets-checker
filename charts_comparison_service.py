@@ -26,7 +26,14 @@ def compare(spreadsheet_id, correct_spreadsheet_id):
         else:
             incorrect_charts[title] = list()
 
-    return incorrect_charts
+    ratio_of_one_chart = 1 / len(correct_charts)
+    ratio_of_mistakes = ratio_of_one_chart * len(incorrect_charts)
+
+    for key, value in incorrect_charts.items():
+        if len(value) != 0:
+            ratio_of_mistakes -= ratio_of_one_chart * 0.2
+
+    return 1 - ratio_of_mistakes
 
 
 def compare_by_values(correct_chart, chart_to_check):
@@ -84,8 +91,8 @@ def get_charts(spreadsheet_id):
     return charts
 
 
-# if __name__ == "__main__":
-#     spreadsheet_id = "1UYNIcy6FNgUjgz-jWga7YbdWOTR5xnOfsN5UdOv7JYQ"
-#     correct_spreadsheet_id = "1vbWr-v4WKx1sUzTTe1cp89A4qZOgj6CY2XIuF9Wst20"
-#     result = compare(spreadsheet_id, correct_spreadsheet_id)
-#     pprint(result)
+if __name__ == "__main__":
+    spreadsheet_id = "1UYNIcy6FNgUjgz-jWga7YbdWOTR5xnOfsN5UdOv7JYQ"
+    correct_spreadsheet_id = "1vbWr-v4WKx1sUzTTe1cp89A4qZOgj6CY2XIuF9Wst20"
+    result = compare(spreadsheet_id, correct_spreadsheet_id)
+    pprint(result)
