@@ -1,19 +1,20 @@
 import sys
-from pprint import pprint
-from google_sheet_service import GoogleSheetService
-from value_comparison_service import ValueComparisonService
+
 from charts_comparison_service import ChartsComparisonService
+from config import Config
+from google_sheet_service import GoogleSheetService
 from link_service import get_sheet_id_from_link
-
-
-system_score = 100
-table_values_ratio = 0.6
-charts_ratio = 0.4
-
+from value_comparison_service import ValueComparisonService
 
 if __name__ == "__main__":
     try:
-        link_of_correct_doc = sys.argv[1]
+        config = Config()
+        system_score = config.get_system_score()
+        table_values_ratio = config.get_table_values_ratio()
+        charts_ratio = config.get_charts_ratio()
+
+        id_of_correct_doc = sys.argv[1]
+        link_of_correct_doc = config.get_sheet_link_by_id(id_of_correct_doc)
         link_of_doc_to_check = sys.argv[2]
 
         sample_id = get_sheet_id_from_link(link_of_correct_doc)
@@ -29,6 +30,8 @@ if __name__ == "__main__":
         charts_comparison_result = round(charts_comparison_service.compare(check_id, sample_id), 2)
 
         result = round(system_score * (table_values_ratio * value_comparison_result + charts_ratio * charts_comparison_result), 2)
-        pprint(f"result: {result}")
-    except:
-        pprint("incorrect main func params")
+        print(f"result: {result}")
+    except IndexError:
+        print("incorrect main func params")
+    except KeyError:
+        print("wrong id of document")
